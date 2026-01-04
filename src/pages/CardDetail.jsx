@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import cardsData from '../data/cardsData.json'
 import { getCardById } from '../utils/filterHelpers'
-import { CaretLeft } from '@phosphor-icons/react'
+
 
 function CardDetail() {
   const { id } = useParams()

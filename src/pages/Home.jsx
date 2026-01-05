@@ -20,11 +20,23 @@ function Home() {
     setShowEnterIcon(value !== '')
   }
 
+  const applyFilter = () => {
+    const value = tempFdAmount === '' ? 0 : Number(tempFdAmount)
+    setFdAmount(value)
+    setShowEnterIcon(false)
+  }
+
   const handleFdAmountKeyDown = (e) => {
     if (e.key === 'Enter') {
-      const value = tempFdAmount === '' ? 0 : Number(tempFdAmount)
-      setFdAmount(value)
-      setShowEnterIcon(false)
+      applyFilter()
+      e.target.blur() // Close keyboard on mobile
+    }
+  }
+
+  const handleFdAmountBlur = () => {
+    // Auto-apply filter when user taps away on mobile
+    if (tempFdAmount !== '') {
+      applyFilter()
     }
   }
 
@@ -102,19 +114,26 @@ function Home() {
             <span className="text-black font-semibold">₹</span>
             <input
               type="text"
+              inputMode="numeric"
               value={tempFdAmount === '' ? (fdAmount === 0 ? '' : formatCurrency(fdAmount)) : formatCurrency(Number(tempFdAmount))}
               onChange={handleFdAmountChange}
               onKeyDown={handleFdAmountKeyDown}
+              onBlur={handleFdAmountBlur}
               placeholder="0"
               className="inline-block w-28 sm:w-32 font-semibold text-black bg-transparent border-b-2 border-black focus:outline-none hover:text-gray-700 transition-colors pb-0.5 px-1 placeholder-gray-300"
             />
-            {/* Enter Icon */}
-            <span className={`text-sm text-gray-400 flex items-center gap-1 transition-all duration-300 ${showEnterIcon ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 pointer-events-none'}`}>
+            {/* Enter Icon - Clickable on mobile */}
+            <button
+              type="button"
+              onClick={applyFilter}
+              className={`text-sm text-gray-400 flex items-center gap-1 transition-all duration-300 ${showEnterIcon ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 pointer-events-none'}`}
+              aria-label="Apply filter"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-xs">Enter</span>
-            </span>
+              <span className="text-xs">Go</span>
+            </button>
           </div>
         </div>
 
